@@ -3,6 +3,10 @@
   "displayName": "WebNowPlaying-VSCode",
   "description": "",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ne0ekspert/webnowplaying-vscode.git"
+  },
   "engines": {
     "vscode": "^1.77.0"
   },
@@ -28,7 +32,7 @@
     ],
     "configuration":[
       {
-        "title": "Listen Port",
+        "title": "wnpvscode.port",
         "properties": {
           "mnpvscode.port": {
             "type": "number",
