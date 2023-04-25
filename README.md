@@ -11,7 +11,8 @@ Shows current music's artist, title, album, duration.
 
 ## Extension Settings
 
-* `wnpvscode.port`: Port to listen on
+* `WebNowPlaying.port`: Port to listen on
+* `WebNowPlaying.alignToRight`: align status bar item to right
 
 ## Known Issues
 
