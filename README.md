@@ -19,4 +19,10 @@ Shows current music's artist, title, album, duration.
 
 ### 0.0.1
 
-Initial release
+* Initial release
+
+### 0.0.2
+
+* changed `setInterval` to callback function
+* changed configuration names
+* changed command titles

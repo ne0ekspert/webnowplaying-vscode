@@ -58,9 +58,9 @@ export class WNPRedux {
     public clients = 0;
     
     private _mediaInfoDictionary: MediaInfo[] = [];
-    private _recipients = [];
     private _version: String;
     private _server;
+    private _updateCallback: Function | undefined;
 
     public control: {
         togglePlaying: () => void,
@@ -229,6 +229,10 @@ export class WNPRedux {
                         console.warn(`Unknown message type: ${messageType}; (${message})`);
                         break;
                 }
+
+                if (this._updateCallback) {
+                    this._updateCallback();
+                }
             });
         });
     }
@@ -237,6 +241,14 @@ export class WNPRedux {
         this._server.clients.forEach(client => {
             client.send(message);
         });
+    }
+
+    public on(type: string, callback: Function) {
+        switch(type) {
+            case 'update':
+                this._updateCallback = callback;
+                break;
+        }
     }
 
     private _convertTimeToSeconds(time: string): number {

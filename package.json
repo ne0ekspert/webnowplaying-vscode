@@ -1,8 +1,9 @@
 {
   "name": "webnowplaying-vscode",
   "displayName": "WebNowPlaying-VSCode",
-  "description": "",
-  "version": "0.0.1",
+  "description": "Shows current music using WebNowPlaying-Redux",
+  "version": "0.0.2",
+  "publisher": "ne0ekspert",
   "repository": {
     "type": "git",
     "url": "https://github.com/ne0ekspert/webnowplaying-vscode.git"
@@ -13,30 +14,35 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [ "onStartupFinished" ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "wnpvscode.prevMusic",
-        "title": "Previous Music"
+        "title": "WebNowPlaying-VSCode: Previous Music"
       },
       {
         "command": "wnpvscode.togglePlayMusic",
-        "title": "Play/Pause Music"
+        "title": "WebNowPlaying-VSCode: Play/Pause Music"
       },
       {
         "command": "wnpvscode.nextMusic",
-        "title": "Next Music"
+        "title": "WebNowPlaying-VSCode: Next Music"
       }
     ],
     "configuration":[
       {
-        "title": "wnpvscode.port",
+        "id": "wnpsettings",
+        "title": "WebNowPlaying",
         "properties": {
-          "mnpvscode.port": {
+          "WebNowPlaying.port": {
             "type": "number",
             "default": 1234
+          },
+          "WebNowPlaying.alignToRight": {
+            "type": "boolean",
+            "default": false
           }
         }
       }

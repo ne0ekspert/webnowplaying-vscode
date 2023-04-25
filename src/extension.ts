@@ -15,28 +15,30 @@ import { WNPRedux } from './WNPRedux';
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	const webNowPlaying = new WNPRedux(1234, '1.0.0');
-	const textLabel = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
+	const configuration = vscode.workspace.getConfiguration();
+	const webNowPlaying = new WNPRedux(configuration.get('wnpvscode.port') || 1234, '1.0.0');
+	const textLabelAlign = configuration.get('wnpvscode.alignToRight') ?
+		vscode.StatusBarAlignment.Right : vscode.StatusBarAlignment.Left;
+	const textLabel = vscode.window.createStatusBarItem(textLabelAlign);
 	textLabel.command = "wnpvscode.togglePlayMusic";
 
 	vscode.commands.registerCommand("wnpvscode.prevMusic", () => {
-		console.log('previous music');
 		webNowPlaying.control.previous();
 	});
 
 	vscode.commands.registerCommand("wnpvscode.togglePlayMusic", () => {
-		console.log('play/pause music');
 		webNowPlaying.control.togglePlaying();
 	});
 
 	vscode.commands.registerCommand("wnpvscode.nextMusic", () => {
-		console.log('next music');
 		webNowPlaying.control.next();
 	});
 
-	setInterval(() => {
-		textLabel.text = `$(play) ${webNowPlaying.mediaInfo.artist} - ${webNowPlaying.mediaInfo.title} [${webNowPlaying.mediaInfo.album}] ${webNowPlaying.mediaInfo.position} / ${webNowPlaying.mediaInfo.duration}`;
-	}, 250);
+	webNowPlaying.on('update', () => {
+		let sound = webNowPlaying.mediaInfo.volume > 0 ? '$(unmute)' : '$(mute)';
+		let play = webNowPlaying.mediaInfo.state === 'PLAYING' ? '$(play)' : '$(debug-pause)';
+		textLabel.text = `${play} ${webNowPlaying.mediaInfo.artist} - ${webNowPlaying.mediaInfo.title} [${webNowPlaying.mediaInfo.album}] ${webNowPlaying.mediaInfo.position} / ${webNowPlaying.mediaInfo.duration} ${sound} ${webNowPlaying.mediaInfo.volume}%`;
+	});
 	
 	textLabel.show();
 
