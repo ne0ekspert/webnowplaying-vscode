@@ -4,7 +4,6 @@ class MediaInfo {
     private _title = '';
     private _state = 'STOPPED';
     private _volume = 0;
-    webSocketID = '';
     player = '';
     artist = '';
     album = '';
@@ -17,7 +16,6 @@ class MediaInfo {
     rating = 0;
     repeatState = 'NONE';
     shuffle = false;
-    timestamp = 0;
 
     get state() {
         return this._state;
@@ -25,7 +23,6 @@ class MediaInfo {
 
     set state(value: string) {
         this._state = value;
-        this.timestamp = new Date().getTime();
     }
 
     get title() {
@@ -34,11 +31,6 @@ class MediaInfo {
 
     set title(value: string) {
         this._title = value;
-        if (value.length) {
-            this.timestamp = new Date().getTime();
-        } else {
-            this.timestamp = 0;
-        }
     }
 
     get volume() {
@@ -47,9 +39,6 @@ class MediaInfo {
 
     set volume(value: number) {
         this._volume = value;
-        if (this._state === 'PLAYING') {
-            this.timestamp = new Date().getTime();
-        }
     }
 }
 
@@ -80,9 +69,9 @@ export class WNPRedux {
         setRating: (rating: number) => void,
     };
 
-    constructor(port: number, version: string) {
+    constructor(host: string, port: number, version: string) {
         this._version = version;
-        this._server = new WebSocket.Server({ port: port });
+        this._server = new WebSocket.Server({ port: port, host: host });
         this.control = {
             togglePlaying: () => {
                 this.sendMessage('TOGGLE_PLAYING');
@@ -155,9 +144,6 @@ export class WNPRedux {
 
             ws.on('message', (e) => {
                 const message = e.toString();
-                if (message.toUpperCase() === 'RECIPIENT') {
-
-                }
 
                 console.log(message);
 
@@ -170,8 +156,6 @@ export class WNPRedux {
                 if (!found) {
                     this._mediaInfoDictionary.push(currentMediaInfo);
                 }
-
-                console.log(messageType, info);
 
                 switch (messageType) {
                     case 'PLAYER':
@@ -249,6 +233,10 @@ export class WNPRedux {
                 this._updateCallback = callback;
                 break;
         }
+    }
+
+    public close() {
+        this._server.close();
     }
 
     private _convertTimeToSeconds(time: string): number {

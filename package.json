@@ -2,8 +2,9 @@
   "name": "webnowplaying-vscode",
   "displayName": "WebNowPlaying-VSCode",
   "description": "Shows current music using WebNowPlaying-Redux",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "ne0ekspert",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/ne0ekspert/webnowplaying-vscode.git"
@@ -29,6 +30,26 @@
       {
         "command": "wnpvscode.nextMusic",
         "title": "WebNowPlaying-VSCode: Next Music"
+      },
+      {
+        "command": "wnpvscode.toggleMute",
+        "title": "WebNowPlaying-VSCode: Toggle Mute"
+      },
+      {
+        "command": "wnpvscode.toggleRepeat",
+        "title": "WebNowPlaying-VSCode: Toggle Repeat"
+      },
+      {
+        "command": "wnpvscode.toggleShuffle",
+        "title": "WebNowPlaying-VSCode: Toggle Shuffle"
+      },
+      {
+        "command": "wnpvscode.toggleThumbsUp",
+        "title": "WebNowPlaying-VSCode: Toggle Thumbs Up"
+      },
+      {
+        "command": "wnpvscode.toggleThumbsDown",
+        "title": "WebNowPlaying-VSCode: Toggle Thumbs Down"
       }
     ],
     "configuration":[
@@ -40,9 +61,36 @@
             "type": "number",
             "default": 1234
           },
+          "WebNowPlaying.host": {
+            "type": "string",
+            "default": "127.0.0.1"
+          },
           "WebNowPlaying.alignToRight": {
             "type": "boolean",
             "default": false
+          },
+          "WebNowPlaying.priority": {
+            "type": "number",
+            "default": 0,
+            "description": "Setting this higher will place status bar item to aligned direction"
+          },
+          "WebNowPlaying.infoFormat": {
+            "type": "string",
+            "default": "{play-icon} {artist} - {title} [{album}] {position} / {duration}",
+            "description": "Format of track info"
+          },
+          "WebNowPlaying.volumeFormat": {
+            "type": "string",
+            "default": "{volume-icon} {volume}%"
+          },
+          "WebNowPlaying.showVolume": {
+            "type": "boolean",
+            "default": true
+          },
+          "WebNowPlaying.showControl": {
+            "type": "boolean",
+            "default": true,
+            "description": "Show next/previous buttons"
           }
         }
       }
