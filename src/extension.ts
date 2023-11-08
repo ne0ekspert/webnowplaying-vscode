@@ -22,44 +22,10 @@ const volumeLabel = vscode.window.createStatusBarItem(statusBarAlign, configurat
 const prevButton = vscode.window.createStatusBarItem(statusBarAlign, configuration.get('WebNowPlaying.priority'));
 const nextButton = vscode.window.createStatusBarItem(statusBarAlign, configuration.get('WebNowPlaying.priority'));
 
-vscode.workspace.onDidChangeConfiguration((e) => {
-	if (e.affectsConfiguration('WebNowPlaying.host')) {
-		vscode.window.showInformationMessage('Reloading Visual Studio Code is required to apply the configuration.', 'Reload Now')
-		.then((value) => {
-			if (value === "Reload Now") {
-				vscode.commands.executeCommand('workbench.action.reloadWindow');
-			}
-		});
-	}
-
-	if (configuration.get('WebNowPlaying.showControl')) {
-		prevButton.show();
-		nextButton.show();
-	} else {
-		prevButton.hide();
-		nextButton.hide();
-	}
-
-	if (configuration.get('WebNowPlaying.showVolume')) {
-		volumeLabel.show();
-	} else {
-		volumeLabel.hide();
-	}
-
-});
-
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	let previousVolume = webNowPlaying.mediaInfo.volume;
-	const webviewPanel = vscode.window.createWebviewPanel(
-		'WebNowPlaying.sidebar',
-		'WebNowPlaying',
-		vscode.ViewColumn.Beside,
-		{
-			enableScripts: true
-		}
-	);
 
 	infoLabel.text = '$(sync~spin) Connecting to WebNowPlaying-Redux...';
 	infoLabel.command = "wnpvscode.togglePlayMusic";
@@ -75,10 +41,24 @@ export function activate(context: vscode.ExtensionContext) {
 		infoLabel,
 		volumeLabel,
 		prevButton,
-		nextButton,
-		webviewPanel
+		nextButton
 	);
 
+	if (configuration.get('WebNowPlaying.showControl')) {
+		prevButton.show();
+		nextButton.show();
+	} else {
+		prevButton.hide();
+		nextButton.hide();
+	}
+
+	infoLabel.show();
+
+	if (configuration.get('WebNowPlaying.showVolume')) {
+		volumeLabel.show();
+	} else {
+		volumeLabel.hide();
+	}
 
 	// Commands
 	let disposable: vscode.Disposable;
@@ -106,10 +86,13 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 	context.subscriptions.push(disposable);
 
-	disposable = vscode.commands.registerCommand("wnpvscode.toggleMute", () => {
-		let temp = webNowPlaying.mediaInfo.volume;
-		webNowPlaying.control.setVolume(previousVolume);
-		previousVolume = temp;
+	disposable = vscode.commands.registerCommand("wnpvscode.changeVolume", () => {
+		vscode.window.showInputBox({
+			placeHolder: '0-100 Volume...',
+			value: String(webNowPlaying.mediaInfo.volume)
+		}).then((volume) => {
+			webNowPlaying.control.setVolume(Number(volume));
+		});
 	});
 	context.subscriptions.push(disposable);
 
@@ -141,13 +124,39 @@ export function activate(context: vscode.ExtensionContext) {
 
 	disposable = vscode.commands.registerCommand("wnpvscode.toggleThumbsDown", () => {
 		if (webNowPlaying.mediaInfo.rating === 1) {
-			vscode.window.showInformationMessage(`You removed Thumbs up on ${webNowPlaying.mediaInfo.title}`);
+			vscode.window.showInformationMessage(`You removed Thumbs down on ${webNowPlaying.mediaInfo.title}`);
 		} else {
-			vscode.window.showInformationMessage(`You gave Thumbs up on ${webNowPlaying.mediaInfo.title}`);
+			vscode.window.showInformationMessage(`You gave Thumbs down on ${webNowPlaying.mediaInfo.title}`);
 		}
 		webNowPlaying.control.toggleThumbsDown();
 	});
 	context.subscriptions.push(disposable);
+
+	vscode.workspace.onDidChangeConfiguration((e) => {
+		if (e.affectsConfiguration('WebNowPlaying.host')) {
+			vscode.window.showInformationMessage('Reloading Visual Studio Code is required to apply the configuration.', 'Reload Now')
+			.then((value) => {
+				if (value === "Reload Now") {
+					vscode.commands.executeCommand('workbench.action.reloadWindow');
+				}
+			});
+		}
+	
+		if (configuration.get('WebNowPlaying.showControl')) {
+			prevButton.show();
+			nextButton.show();
+		} else {
+			prevButton.hide();
+			nextButton.hide();
+		}
+	
+		if (configuration.get('WebNowPlaying.showVolume')) {
+			volumeLabel.show();
+		} else {
+			volumeLabel.hide();
+		}
+	
+	});
 
 	webNowPlaying.on('update', () => {
 		const soundIcon = webNowPlaying.mediaInfo.volume > 0 ? '$(unmute)' : '$(mute)';
