@@ -32,6 +32,10 @@
         "title": "WebNowPlaying-VSCode: Next Music"
       },
       {
+        "command": "wnpvscode.changeVolume",
+        "title": "WebNowPlaying-VSCode: Change Volume"
+      },
+      {
         "command": "wnpvscode.toggleMute",
         "title": "WebNowPlaying-VSCode: Toggle Mute"
       },
@@ -50,6 +54,10 @@
       {
         "command": "wnpvscode.toggleThumbsDown",
         "title": "WebNowPlaying-VSCode: Toggle Thumbs Down"
+      },
+      {
+        "command": "wnpvscode.toggleWebViewControl",
+        "title": "WebNowPlaying-VSCode: Toggle WebView Control"
       }
     ],
     "configuration":[
@@ -93,6 +101,15 @@
             "description": "Show next/previous buttons"
           }
         }
+      }
+    ]
+  },
+  "views": {
+    "explorer": [
+      {
+        "type": "webview",
+        "id": "wnpvscode.controlView",
+        "name": "Media Control"
       }
     ]
   },

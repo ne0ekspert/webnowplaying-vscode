@@ -12,6 +12,8 @@ import * as vscode from 'vscode';
  */
 import { WNPRedux } from './WNPRedux';
 
+import webview from './webview';
+
 const configuration = vscode.workspace.getConfiguration();
 let webNowPlaying: WNPRedux = new WNPRedux(configuration.get('WebNowPlaying.host') || "127.0.0.1", configuration.get('WebNowPlaying.port') || 1234, '1.0.0');
 
@@ -25,6 +27,8 @@ const nextButton = vscode.window.createStatusBarItem(statusBarAlign, configurati
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+	const webctrl = new webview(context);
+
 	let previousVolume = webNowPlaying.mediaInfo.volume;
 
 	infoLabel.text = '$(sync~spin) Connecting to WebNowPlaying-Redux...';
@@ -173,6 +177,15 @@ export function activate(context: vscode.ExtensionContext) {
 		})();
 		const shuffleIcon = webNowPlaying.mediaInfo.shuffle ? "$(remote)" : "";
 
+		webctrl.opt = {
+			title: webNowPlaying.mediaInfo.title,
+			artist: webNowPlaying.mediaInfo.artist,
+			album: webNowPlaying.mediaInfo.album,
+			position: webNowPlaying.mediaInfo.position,
+			duration: webNowPlaying.mediaInfo.duration,
+			coverURL: webNowPlaying.mediaInfo.coverURL
+		};
+
 		let text: string = configuration.get('WebNowPlaying.infoFormat') || "{artist} - {title}";
 		text = text.replace('{play-icon}', playIcon)
 				   .replace('{sound-icon}', soundIcon)
@@ -204,6 +217,7 @@ export function activate(context: vscode.ExtensionContext) {
 			volumeLabel.hide();
 		}
 	});
+
 }
 
 // This method is called when your extension is deactivated
