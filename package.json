@@ -2,7 +2,7 @@
   "name": "webnowplaying-vscode",
   "displayName": "WebNowPlaying-VSCode",
   "description": "Shows current music using WebNowPlaying-Redux",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "ne0ekspert",
   "license": "MIT",
   "repository": {
