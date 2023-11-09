@@ -1,3 +1,41 @@
 body {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.album-art-container {
+    display: grid;
+    grid-template-columns: auto;
+    justify-items: center;
+    margin: 50px;
+    height: 40vh;
+    aspect-ratio: 1 / 1;
+}
+
+.album-art, .album-art-blur {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+}
+
+.album-art {
+    margin: 50px;
+    z-index: 1;
+}
+
+.album-art-blur {
+    margin: 50px;
+    filter: blur(50px);
+}
+
+.seek {
+    display: flex;
+    flex-direction: row;
+    width: 90vw;
+}
+
+.seek .bar {
+    background-color: --vscode-panel-border;
+    width: 80vw;
 }

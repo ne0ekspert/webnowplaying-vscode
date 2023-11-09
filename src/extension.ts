@@ -139,7 +139,9 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	vscode.workspace.onDidChangeConfiguration((e) => {
-		if (e.affectsConfiguration('WebNowPlaying.host')) {
+		console.log("updated configuration: " + e);
+
+		if (e.affectsConfiguration('WebNowPlaying.host') || e.affectsConfiguration('WebNowPlaying.port')) {
 			vscode.window.showInformationMessage('Reloading Visual Studio Code is required to apply the configuration.', 'Reload Now')
 			.then((value) => {
 				if (value === "Reload Now") {
@@ -161,7 +163,6 @@ export function activate(context: vscode.ExtensionContext) {
 		} else {
 			volumeLabel.hide();
 		}
-	
 	});
 
 	webNowPlaying.on('update', () => {
@@ -184,7 +185,9 @@ export function activate(context: vscode.ExtensionContext) {
 			artist: webNowPlaying.mediaInfo.artist,
 			album: webNowPlaying.mediaInfo.album,
 			position: webNowPlaying.mediaInfo.position,
+			positionSeconds: webNowPlaying.mediaInfo.positionSeconds,
 			duration: webNowPlaying.mediaInfo.duration,
+			durationSeconds: webNowPlaying.mediaInfo.durationSeconds,
 			coverURL: webNowPlaying.mediaInfo.coverURL
 		});
 
@@ -202,22 +205,8 @@ export function activate(context: vscode.ExtensionContext) {
 				   .replace('{volume}', String(webNowPlaying.mediaInfo.volume))
 				   .replace('{rating}', String(webNowPlaying.mediaInfo.rating));
 
-		if (configuration.get('WebNowPlaying.showControl')) {
-			prevButton.show();
-			nextButton.show();
-		} else {
-			prevButton.hide();
-			nextButton.hide();
-		}
-
 		infoLabel.text = text;
 		infoLabel.show();
-
-		if (configuration.get('WebNowPlaying.showVolume')) {
-			volumeLabel.show();
-		} else {
-			volumeLabel.hide();
-		}
 	});
 
 }

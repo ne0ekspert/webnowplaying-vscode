@@ -5,7 +5,9 @@ interface OptType {
     artist: string,
     album: string,
     position: string,
+    positionSeconds: number,
     duration: string,
+    durationSeconds: number,
     coverURL: string
 }
 
@@ -15,7 +17,9 @@ class WebviewController {
         artist: 'ARTIST',
         album: 'ALBUM',
         position: '0:00',
+        positionSeconds: 0,
         duration: '0:00',
+        durationSeconds: 0,
         coverURL: '',
     };
 
@@ -61,14 +65,18 @@ class WebviewController {
     <link rel='stylesheet' href='${styleMainUri}'>
 </head>
 <body>
-    <img class='album-art' src="${this.opt.coverURL}">
-    
+    <div class='album-art-container'>
+        <img class='album-art' src="${this.opt.coverURL}">
+        <img class='album-art-blur' src="${this.opt.coverURL}">
+    </div>
+
     <h1 class='title'>${this.opt.title}</h1>
     <h2 class='artist'>${this.opt.artist}</h2>
     <h3 class='album'>${this.opt.album}</h3>
     
-    <div>
+    <div class='seek'>
         <span class='position'>${this.opt.position}</span>
+        <input type='range' class='bar' min='0' max='${this.opt.durationSeconds}' value='${this.opt.positionSeconds}'>
         <span class='duration'>${this.opt.duration}</span>
     </div>
 </body>
