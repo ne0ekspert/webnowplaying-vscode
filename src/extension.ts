@@ -65,76 +65,78 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 
 	// Commands
-	let disposable: vscode.Disposable;
 
-	disposable = vscode.commands.registerCommand("wnpvscode.prevMusic", () => {
-		webNowPlaying.control.previous();
-	});
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(
+		vscode.commands.registerCommand("wnpvscode.prevMusic", () => {
+			webNowPlaying.control.previous();
+		}),
 
-	disposable = vscode.commands.registerCommand("wnpvscode.togglePlayMusic", () => {
-		switch (webNowPlaying.mediaInfo.state) {
-			case "PLAYING":
-				vscode.window.showInformationMessage(`Pausing ${webNowPlaying.mediaInfo.title}`);
-				break;
-			case "PAUSED":
-				vscode.window.showInformationMessage(`Playing ${webNowPlaying.mediaInfo.title}`);
-				break;
-		}
-		webNowPlaying.control.togglePlaying();
-	});
-	context.subscriptions.push(disposable);
+		vscode.commands.registerCommand("wnpvscode.togglePlayMusic", () => {
+			switch (webNowPlaying.mediaInfo.state) {
+				case "PLAYING":
+					vscode.window.showInformationMessage(`Pausing ${webNowPlaying.mediaInfo.title}`);
+					break;
+				case "PAUSED":
+					vscode.window.showInformationMessage(`Playing ${webNowPlaying.mediaInfo.title}`);
+					break;
+			}
+			webNowPlaying.control.togglePlaying();
+		}),
 
-	disposable = vscode.commands.registerCommand("wnpvscode.nextMusic", () => {
-		webNowPlaying.control.next();
-	});
-	context.subscriptions.push(disposable);
+		vscode.commands.registerCommand("wnpvscode.nextMusic", () => {
+			webNowPlaying.control.next();
+		}),
 
-	disposable = vscode.commands.registerCommand("wnpvscode.changeVolume", () => {
-		vscode.window.showInputBox({
-			placeHolder: '0-100 Volume...',
-			value: String(webNowPlaying.mediaInfo.volume)
-		}).then((volume) => {
-			webNowPlaying.control.setVolume(Number(volume));
-		});
-	});
-	context.subscriptions.push(disposable);
+		vscode.commands.registerCommand("wnpvscode.changeVolume", () => {
+			vscode.window.showInputBox({
+				placeHolder: '0-100 Volume...',
+				value: String(webNowPlaying.mediaInfo.volume)
+			}).then((volume) => {
+				webNowPlaying.control.setVolume(Number(volume));
+			});
+		}),
 
-	disposable = vscode.commands.registerCommand("wnpvscode.toggleRepeat", () => {
-		switch (webNowPlaying.mediaInfo.repeatState) {
-			case "NONE":
-				vscode.window.showInformationMessage(`Enabling loop on ${webNowPlaying.mediaInfo.title}`);
-			default:
-				vscode.window.showInformationMessage(`Disabling loop on ${webNowPlaying.mediaInfo.title}`);
-		}
-		webNowPlaying.control.toggleRepeat();
-	});
-	context.subscriptions.push(disposable);
+		vscode.commands.registerCommand("wnpvscode.toggleMute", () => {
+			if (webNowPlaying.mediaInfo.volume === 0) {
+				webNowPlaying.control.setVolume(previousVolume);
+			} else {
+				previousVolume = webNowPlaying.mediaInfo.volume;
+				webNowPlaying.control.setVolume(0);
+			}
+		}),
 
-	disposable = vscode.commands.registerCommand("wnpvscode.toggleShuffle", () => {
-		webNowPlaying.control.toggleShuffle();
-	});
-	context.subscriptions.push(disposable);
+		vscode.commands.registerCommand("wnpvscode.toggleRepeat", () => {
+			switch (webNowPlaying.mediaInfo.repeatState) {
+				case "NONE":
+					vscode.window.showInformationMessage(`Enabling loop on ${webNowPlaying.mediaInfo.title}`);
+				default:
+					vscode.window.showInformationMessage(`Disabling loop on ${webNowPlaying.mediaInfo.title}`);
+			}
+			webNowPlaying.control.toggleRepeat();
+		}),
 
-	disposable = vscode.commands.registerCommand("wnpvscode.toggleThumbsUp", () => {
-		if (webNowPlaying.mediaInfo.rating === 5) {
-			vscode.window.showInformationMessage(`You removed Thumbs up on ${webNowPlaying.mediaInfo.title}`);
-		} else {
-			vscode.window.showInformationMessage(`You gave Thumbs up on ${webNowPlaying.mediaInfo.title}`);
-		}
-		webNowPlaying.control.toggleThumbsUp();
-	});
-	context.subscriptions.push(disposable);
+		vscode.commands.registerCommand("wnpvscode.toggleShuffle", () => {
+			webNowPlaying.control.toggleShuffle();
+		}),
 
-	disposable = vscode.commands.registerCommand("wnpvscode.toggleThumbsDown", () => {
-		if (webNowPlaying.mediaInfo.rating === 1) {
-			vscode.window.showInformationMessage(`You removed Thumbs down on ${webNowPlaying.mediaInfo.title}`);
-		} else {
-			vscode.window.showInformationMessage(`You gave Thumbs down on ${webNowPlaying.mediaInfo.title}`);
-		}
-		webNowPlaying.control.toggleThumbsDown();
-	});
-	context.subscriptions.push(disposable);
+		vscode.commands.registerCommand("wnpvscode.toggleThumbsUp", () => {
+			if (webNowPlaying.mediaInfo.rating === 5) {
+				vscode.window.showInformationMessage(`You removed Thumbs up on ${webNowPlaying.mediaInfo.title}`);
+			} else {
+				vscode.window.showInformationMessage(`You gave Thumbs up on ${webNowPlaying.mediaInfo.title}`);
+			}
+			webNowPlaying.control.toggleThumbsUp();
+		}),
+
+		vscode.commands.registerCommand("wnpvscode.toggleThumbsDown", () => {
+			if (webNowPlaying.mediaInfo.rating === 1) {
+				vscode.window.showInformationMessage(`You removed Thumbs down on ${webNowPlaying.mediaInfo.title}`);
+			} else {
+				vscode.window.showInformationMessage(`You gave Thumbs down on ${webNowPlaying.mediaInfo.title}`);
+			}
+			webNowPlaying.control.toggleThumbsDown();
+		})
+	);
 
 	vscode.workspace.onDidChangeConfiguration((e) => {
 		if (e.affectsConfiguration('WebNowPlaying.host')) {
