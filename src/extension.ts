@@ -177,14 +177,14 @@ export function activate(context: vscode.ExtensionContext) {
 		})();
 		const shuffleIcon = webNowPlaying.mediaInfo.shuffle ? "$(remote)" : "";
 
-		webctrl.opt = {
+		webctrl.update({
 			title: webNowPlaying.mediaInfo.title,
 			artist: webNowPlaying.mediaInfo.artist,
 			album: webNowPlaying.mediaInfo.album,
 			position: webNowPlaying.mediaInfo.position,
 			duration: webNowPlaying.mediaInfo.duration,
 			coverURL: webNowPlaying.mediaInfo.coverURL
-		};
+		});
 
 		let text: string = configuration.get('WebNowPlaying.infoFormat') || "{artist} - {title}";
 		text = text.replace('{play-icon}', playIcon)
