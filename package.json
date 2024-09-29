@@ -2,7 +2,7 @@
   "name": "webnowplaying-vscode",
   "displayName": "WebNowPlaying-VSCode",
   "description": "Shows current music using WebNowPlaying-Redux",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publisher": "ne0ekspert",
   "license": "MIT",
   "repository": {
@@ -99,6 +99,15 @@
             "type": "boolean",
             "default": true,
             "description": "Show next/previous buttons"
+          },
+          "WebNowPlaying.showLyrics": {
+            "type": "boolean",
+            "default": true
+          },
+          "WebNowPlaying.lyricsFolder": {
+            "type": "string",
+            "default": "",
+            "description": "LRC lyrics stored folder path (trailing slash)"
           }
         }
       }

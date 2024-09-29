@@ -53,3 +53,7 @@ Shows current music's artist, title, album, duration.
 ### 0.0.4
 
 * added webview controllers
+
+### 0.0.5
+
+* LRC lyrics display
