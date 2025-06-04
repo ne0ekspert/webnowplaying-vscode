@@ -45,7 +45,11 @@ export function updateIcons(wnp: WNPRedux, mainLabel: vscode.StatusBarItem, volu
     mainLabel.show();
 
     volumeLabel.text = replaceMacros(wnp, volumeText);
-    volumeLabel.show();
+    if (configuration.get('WebNowPlaying.showVolume')) {
+        volumeLabel.show();
+    } else {
+        volumeLabel.hide();
+    }
 }
 
 function parseLrc(content: string) {
